@@ -38,9 +38,21 @@ namespace MoveRate_Api.Controllers
 		}
 
 		// POST: api/Movies
+		// POST: api/Movies
 		[HttpPost]
-		public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+		public async Task<ActionResult<Movie>> PostMovie(MovieCreateDto movieDto)
 		{
+			// 1. DTO'dan gelen temiz verileri asıl veritabanı modelimize (Movie) aktarıyoruz (Mapping)
+			var movie = new Movie
+			{
+				Title = movieDto.Title,
+				Description = movieDto.Description,
+				ReleaseYear = movieDto.ReleaseYear,
+				PosterUrl = movieDto.PosterUrl
+				// İlişkiler (Ratings, Comments vb.) ilk başta boş (null/empty) olarak başlayacak
+			};
+
+			// 2. Veritabanına kaydediyoruz
 			_context.Movies.Add(movie);
 			await _context.SaveChangesAsync();
 
